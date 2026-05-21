@@ -1,0 +1,2 @@
+[1] MAP_CREATED width=3 height=3 
+[1] UNIT_SPAWNED unitId=1 unitType=Swordsman x=1 y=1 

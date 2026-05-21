@@ -1,0 +1,18 @@
+[1] MAP_CREATED width=12 height=12 
+[1] UNIT_SPAWNED unitId=1 unitType=Swordsman x=0 y=0 
+[1] UNIT_SPAWNED unitId=2 unitType=Swordsman x=1 y=0 
+[1] UNIT_SPAWNED unitId=3 unitType=Hunter x=0 y=11 
+[1] UNIT_SPAWNED unitId=4 unitType=Swordsman x=0 y=6 
+[2] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=3 targetHp=7 
+[2] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=3 targetHp=7 
+[2] UNIT_ATTACKED attackerUnitId=3 targetUnitId=4 damage=5 targetHp=5 
+[3] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=3 targetHp=4 
+[3] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=3 targetHp=4 
+[3] UNIT_ATTACKED attackerUnitId=3 targetUnitId=4 damage=5 targetHp=0 
+[3] UNIT_DIED unitId=4 
+[4] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=3 targetHp=1 
+[4] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=3 targetHp=1 
+[5] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=3 targetHp=0 
+[5] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=3 targetHp=0 
+[5] UNIT_DIED unitId=1 
+[5] UNIT_DIED unitId=2 
