@@ -98,11 +98,11 @@ namespace sw::core::ecs
 			const size_t denseIndex = _sparse[entity];
 			const size_t lastDenseIndex = _dense.size() - 1;
 
-			if (denseIndex != lastDenseIndex)
+			for (size_t i = denseIndex; i < lastDenseIndex; ++i)
 			{
-				_dense[denseIndex] = std::move(_dense[lastDenseIndex]);
-				_denseEntities[denseIndex] = _denseEntities[lastDenseIndex];
-				_sparse[_denseEntities[denseIndex]] = denseIndex;
+				_dense[i] = std::move(_dense[i + 1]);
+				_denseEntities[i] = _denseEntities[i + 1];
+				_sparse[_denseEntities[i]] = i;
 			}
 
 			_dense.pop_back();
