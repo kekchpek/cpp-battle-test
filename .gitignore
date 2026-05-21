@@ -576,3 +576,13 @@ FodyWeavers.xsd
 
 .DS_Store
 .idea
+
+### Project-specific ###
+# Out-of-source CMake/Ninja build directory
+build/
+
+# clangd index cache
+.cache/
+
+# Local VS Code / Cursor settings (regenerate locally)
+.vscode/

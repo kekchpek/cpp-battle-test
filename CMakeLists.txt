@@ -3,7 +3,33 @@ project(sw_battle_test)
 
 set(CMAKE_CXX_STANDARD 20)
 
-file(GLOB_RECURSE SOURCES src/*.cpp src/*.hpp)
-add_executable(sw_battle_test ${SOURCES})
+file(GLOB_RECURSE FEATURE_SOURCES CONFIGURE_DEPENDS
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/Features/*.cpp"
+)
+file(GLOB_RECURSE CORE_SOURCES CONFIGURE_DEPENDS
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/Core/Ecs/*.cpp"
+)
+file(GLOB_RECURSE APP_SOURCES CONFIGURE_DEPENDS
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/App/*.cpp"
+)
 
-target_include_directories(sw_battle_test PUBLIC src/)
+add_library(sw_battle_lib
+	${APP_SOURCES}
+	${CORE_SOURCES}
+	${FEATURE_SOURCES}
+	src/IO/System/CommandParser.cpp
+)
+
+target_include_directories(sw_battle_lib PUBLIC src/)
+
+add_executable(sw_battle_test src/main.cpp)
+target_link_libraries(sw_battle_test PRIVATE sw_battle_lib)
+
+enable_testing()
+
+add_executable(sw_battle_test_validator tests/commands_example_test.cpp)
+target_link_libraries(sw_battle_test_validator PRIVATE sw_battle_lib)
+target_include_directories(sw_battle_test_validator PRIVATE tests)
+target_compile_definitions(sw_battle_test_validator PRIVATE TEST_DATA_DIR="${CMAKE_SOURCE_DIR}")
+
+add_test(NAME commands_example_events COMMAND sw_battle_test_validator)
