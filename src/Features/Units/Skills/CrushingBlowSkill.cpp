@@ -27,7 +27,7 @@ namespace sw::core::features::skills
 		}
 
 		const auto* unit = _world->stash<UnitData>().get(caster);
-		if (unit == nullptr || !unit->isAlive())
+		if (unit == nullptr)
 		{
 			return false;
 		}
@@ -43,7 +43,6 @@ namespace sw::core::features::skills
 			target,
 			unit->power(),
 			*_world,
-			*_eventLog,
-			*_mapService);
+			*_eventLog);
 	}
 }

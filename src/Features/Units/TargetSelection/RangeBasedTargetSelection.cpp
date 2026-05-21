@@ -18,7 +18,7 @@ namespace sw::core::features
 		IMapService& mapService)
 	{
 		const auto* unit = world.stash<UnitData>().get(caster);
-		if (unit == nullptr || !unit->isAlive())
+		if (unit == nullptr)
 		{
 			return ecs::kInvalidEntity;
 		}
@@ -30,7 +30,7 @@ namespace sw::core::features
 			return ecs::kInvalidEntity;
 		}
 
-		const uint32_t maxChebyshevDistance = unit->range() + 1;
+		const uint32_t maxChebyshevDistance = unit->range();
 
 		const std::vector<ecs::Entity> candidates = skills::collectAliveEnemiesAtChebyshevDistance(
 			caster,

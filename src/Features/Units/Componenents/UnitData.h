@@ -17,7 +17,7 @@ namespace sw::core::features
 		UnitData(const UnitData&) = delete;
 		UnitData(UnitData&&) = default;
 		UnitData& operator=(const UnitData&) = delete;
-		UnitData& operator=(UnitData&&) = delete;
+		UnitData& operator=(UnitData&&) = default;
 
 		[[nodiscard]] uint32_t unitType() const { return _unitType; }
 		[[nodiscard]] uint32_t health() const { return _health; }

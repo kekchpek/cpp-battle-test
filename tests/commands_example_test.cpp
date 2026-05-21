@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <string>
 
 #ifndef TEST_DATA_DIR
 #define TEST_DATA_DIR "."
@@ -12,18 +13,18 @@
 
 namespace
 {
-	const char* kTestName = "commands_example_events";
-
-	bool testCommandsExampleEventLog()
+	bool testScenarioEventLog(
+		const char* testName,
+		const std::string& scenarioRelativePath,
+		const std::string& expectedRelativePath)
 	{
-		const std::string scenarioPath = std::string(TEST_DATA_DIR) + "/commands_example.txt";
-		const std::string expectedPath =
-			std::string(TEST_DATA_DIR) + "/tests/expected/commands_example_events.txt";
+		const std::string scenarioPath = std::string(TEST_DATA_DIR) + "/" + scenarioRelativePath;
+		const std::string expectedPath = std::string(TEST_DATA_DIR) + "/" + expectedRelativePath;
 
 		std::ifstream scenario(scenarioPath);
 		if (!scenario)
 		{
-			std::cerr << kTestName << ": failed to open scenario: " << scenarioPath << '\n';
+			std::cerr << testName << ": failed to open scenario: " << scenarioPath << '\n';
 			return false;
 		}
 
@@ -35,17 +36,29 @@ namespace
 		const auto actual = sw::test::splitNonEmptyLines(output.str());
 		const auto expected = sw::test::readLines(expectedPath);
 
-		return sw::test::compareLineByLine(actual, expected, kTestName);
+		return sw::test::compareLineByLine(actual, expected, testName);
 	}
 }
 
 int main()
 {
-	if (!testCommandsExampleEventLog())
+	if (!testScenarioEventLog(
+			"commands_example_events",
+			"tests/commands_example.txt",
+			"tests/expected/commands_example_events.txt"))
 	{
 		return 1;
 	}
 
-	std::cout << kTestName << ": OK\n";
+	if (!testScenarioEventLog(
+			"mutual_kill_events",
+			"tests/mutual_kill.txt",
+			"tests/expected/mutual_kill_events.txt"))
+	{
+		return 1;
+	}
+
+	std::cout << "commands_example_events: OK\n";
+	std::cout << "mutual_kill_events: OK\n";
 	return 0;
 }

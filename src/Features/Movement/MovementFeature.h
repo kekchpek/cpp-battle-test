@@ -34,7 +34,9 @@ namespace sw::core::features
 
 		void setup(app::ServiceProvider& services) override;
 
-		void moveToTarget(ecs::Entity entity) override;
+		[[nodiscard]] bool requiresContinuingSimulation() const override { return false; }
+
+		bool moveToTarget(ecs::Entity entity) override;
 
 	private:
 		AStarAlgorithm _pathfinder;

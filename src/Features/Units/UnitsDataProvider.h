@@ -18,7 +18,7 @@ namespace sw::core::features
 	public:
 		explicit UnitsDataProvider(app::ServiceProvider& services);
 
-		[[nodiscard]] std::span<ISkill* const> getSkills(uint32_t unitType) const override;
+		[[nodiscard]] const std::vector<ISkill*>& getSkills(uint32_t unitType) const override;
 
 	private:
 		std::unordered_map<uint32_t, std::vector<std::unique_ptr<ISkill>>> _skillsByType;

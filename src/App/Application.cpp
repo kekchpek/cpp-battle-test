@@ -2,7 +2,6 @@
 
 #include <Features/MapManagement/MapManagementFeature.h>
 #include <Features/Movement/MovementFeature.h>
-#include <Features/Units/Componenents/UnitData.h>
 #include <Features/Units/UnitsFeature.h>
 #include <IO/System/CommandParser.hpp>
 #include <IO/System/EventLog.hpp>
@@ -26,24 +25,24 @@ namespace sw::core::app
 		uint32_t simulationTicks = 0;
 		while (simulationTicks < kMaxSimulationTicks)
 		{
-			uint32_t aliveUnits = 0;
-			auto& units = world.stash<features::UnitData>();
-			units.forEachEntity([&](ecs::Entity entity) {
-				const auto* unit = units.get(entity);
-				if (unit != nullptr && unit->isAlive())
-				{
-					++aliveUnits;
-				}
-			});
-
-			if (aliveUnits <= 1)
-			{
-				break;
-			}
-
 			eventLog.incrementTick();
 			world.tick();
 			++simulationTicks;
+
+			bool requiresContinuingSimulation = false;
+			for (const auto& feature : _features)
+			{
+				if (feature->requiresContinuingSimulation())
+				{
+					requiresContinuingSimulation = true;
+					break;
+				}
+			}
+
+			if (!requiresContinuingSimulation)
+			{
+				break;
+			}
 		}
 
 		_features.clear();

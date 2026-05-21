@@ -3,7 +3,7 @@
 #include <Features/Units/ISkill.h>
 
 #include <cstdint>
-#include <span>
+#include <vector>
 
 namespace sw::core::features
 {
@@ -18,6 +18,6 @@ namespace sw::core::features
 
 		virtual ~IUnitsDataProvider() = default;
 
-		[[nodiscard]] virtual std::span<ISkill* const> getSkills(uint32_t unitType) const = 0;
+		[[nodiscard]] virtual const std::vector<ISkill*>& getSkills(uint32_t unitType) const = 0;
 	};
 }

@@ -142,7 +142,7 @@ namespace sw::core::features
 			openSet.pop();
 
 			const uint64_t currentKey = cellKey(current.x, current.y);
-			if (closedSet.contains(currentKey))
+			if (closedSet.find(currentKey) != closedSet.end())
 			{
 				continue;
 			}
@@ -181,7 +181,7 @@ namespace sw::core::features
 				}
 
 				const uint64_t neighborKey = cellKey(nx, ny);
-				if (closedSet.contains(neighborKey))
+				if (closedSet.find(neighborKey) != closedSet.end())
 				{
 					continue;
 				}

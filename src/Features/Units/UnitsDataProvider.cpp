@@ -28,12 +28,13 @@ namespace sw::core::features
 		}
 	}
 
-	std::span<ISkill* const> UnitsDataProvider::getSkills(uint32_t unitType) const
+	const std::vector<ISkill*>& UnitsDataProvider::getSkills(uint32_t unitType) const
 	{
+		static const std::vector<ISkill*> kEmptySkills;
 		const auto it = _skillPointersByType.find(unitType);
 		if (it == _skillPointersByType.end())
 		{
-			return {};
+			return kEmptySkills;
 		}
 
 		return it->second;

@@ -15,7 +15,7 @@ namespace sw::core::features::skills
 			_world(services.get<ecs::World>()),
 			_mapService(services.get<IMapService>()),
 			_eventLog(services.get<EventLog>()),
-			_targetSelection(std::make_unique<RangeBasedTargetSelection>(3))
+			_targetSelection(std::make_unique<RangeBasedTargetSelection>(2))
 	{
 	}
 
@@ -27,7 +27,7 @@ namespace sw::core::features::skills
 		}
 
 		const auto* unit = _world->stash<UnitData>().get(caster);
-		if (unit == nullptr || !unit->isAlive() || hasAdjacentUnits(caster))
+		if (unit == nullptr || hasAdjacentUnits(caster))
 		{
 			return false;
 		}
@@ -43,8 +43,7 @@ namespace sw::core::features::skills
 			target,
 			unit->agility(),
 			*_world,
-			*_eventLog,
-			*_mapService);
+			*_eventLog);
 	}
 
 	bool RapidShotSkill::hasAdjacentUnits(ecs::Entity caster) const

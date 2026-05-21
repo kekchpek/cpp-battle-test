@@ -13,6 +13,7 @@
 #include <IO/System/CommandParser.hpp>
 
 #include <optional>
+#include <tuple>
 #include <utility>
 
 namespace sw::core::features
@@ -97,25 +98,25 @@ namespace sw::core::features
 		});
 	}
 
-	void MovementFeature::moveToTarget(ecs::Entity entity)
+	bool MovementFeature::moveToTarget(ecs::Entity entity)
 	{
 		if (_world == nullptr || _locationService == nullptr || _mapService == nullptr)
 		{
-			return;
+			return false;
 		}
 
 		auto& movements = _world->stash<MovementData>();
 		auto* movement = movements.get(entity);
 		if (movement == nullptr || !movement->hasTarget())
 		{
-			return;
+			return false;
 		}
 
 		auto& locations = _world->stash<MapLocation>();
 		auto* location = locations.get(entity);
 		if (location == nullptr)
 		{
-			return;
+			return false;
 		}
 
 		const uint32_t startX = location->x();
@@ -130,10 +131,12 @@ namespace sw::core::features
 			{
 				_eventLog->log(io::MarchEnded{ecs::EntityMetaData::entityLogId(*_world, entity), startX, startY});
 			}
-			return;
+			return true;
 		}
 
-		const auto [mapWidth, mapHeight] = _mapService->getMapSize();
+		uint32_t mapWidth = 0;
+		uint32_t mapHeight = 0;
+		std::tie(mapWidth, mapHeight) = _mapService->getMapSize();
 
 		const auto isInside = [mapWidth, mapHeight](uint32_t x, uint32_t y) {
 			return x < mapWidth && y < mapHeight;
@@ -172,13 +175,13 @@ namespace sw::core::features
 
 		if (!nextStep.has_value())
 		{
-			return;
+			return false;
 		}
 
 		const auto [nextX, nextY] = *nextStep;
 		if (!_locationService->setLocation(entity, nextX, nextY))
 		{
-			return;
+			return false;
 		}
 
 		if (nextX == targetX && nextY == targetY)
@@ -189,6 +192,8 @@ namespace sw::core::features
 				_eventLog->log(io::MarchEnded{ecs::EntityMetaData::entityLogId(*_world, entity), nextX, nextY});
 			}
 		}
+
+		return true;
 	}
 
 	void MovementFeature::setMarchTarget(ecs::Entity entity, uint32_t targetX, uint32_t targetY)

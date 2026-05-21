@@ -16,5 +16,7 @@ namespace sw::core::app
 		virtual ~IFeature() = default;
 
 		virtual void setup(ServiceProvider& services) = 0;
+
+		[[nodiscard]] virtual bool requiresContinuingSimulation() const = 0;
 	};
 }

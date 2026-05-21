@@ -1,6 +1,7 @@
 #pragma once
 
 #include <App/IFeature.h>
+#include <Features/Units/SimulationCompletion/UnitsSimulationCompletionController.h>
 #include <Features/Units/UnitsDataProvider.h>
 #include <Features/Units/UnitsFactory.h>
 
@@ -26,8 +27,11 @@ namespace sw::core::features
 
 		void setup(app::ServiceProvider& services) override;
 
+		[[nodiscard]] bool requiresContinuingSimulation() const override;
+
 	private:
 		std::unique_ptr<UnitsDataProvider> _unitsDataProvider;
 		std::unique_ptr<UnitsFactory> _unitsFactory;
+		std::unique_ptr<UnitsSimulationCompletionController> _simulationCompletionController;
 	};
 }

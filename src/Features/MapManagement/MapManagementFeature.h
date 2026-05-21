@@ -42,6 +42,8 @@ namespace sw::core::features
 
 		void setup(app::ServiceProvider& services) override;
 
+		[[nodiscard]] bool requiresContinuingSimulation() const override { return false; }
+
 		[[nodiscard]] bool createLocation(ecs::Entity entity, uint32_t x, uint32_t y) override;
 		[[nodiscard]] bool setLocation(ecs::Entity entity, uint32_t x, uint32_t y) override;
 

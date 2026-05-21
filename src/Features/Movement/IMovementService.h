@@ -15,6 +15,6 @@ namespace sw::core::features
 
 		virtual ~IMovementService() = default;
 
-		virtual void moveToTarget(ecs::Entity entity) = 0;
+		virtual bool moveToTarget(ecs::Entity entity) = 0;
 	};
 }

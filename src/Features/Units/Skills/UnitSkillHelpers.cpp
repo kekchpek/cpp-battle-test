@@ -6,10 +6,10 @@
 #include <Core/Ecs/Components/EntityMetaData.h>
 #include <Core/Ecs/World.h>
 #include <IO/Events/UnitAttacked.hpp>
-#include <IO/Events/UnitDied.hpp>
 #include <IO/System/EventLog.hpp>
+
 #include <algorithm>
-#include <cstdlib>
+#include <random>
 
 namespace sw::core::features::skills
 {
@@ -40,6 +40,12 @@ namespace sw::core::features::skills
 			uint32_t mapHeight)
 		{
 			return x < mapWidth && y < mapHeight;
+		}
+
+		std::mt19937& targetRng()
+		{
+			static std::mt19937 rng{std::random_device{}()};
+			return rng;
 		}
 	}
 	bool tryGetEntityLocation(ecs::World& world, ecs::Entity entity, uint32_t& x, uint32_t& y)
@@ -109,7 +115,6 @@ namespace sw::core::features::skills
 			}
 		}
 
-		std::sort(candidates.begin(), candidates.end());
 		return candidates;
 	}
 
@@ -120,7 +125,13 @@ namespace sw::core::features::skills
 			return ecs::kInvalidEntity;
 		}
 
-		return candidates.front();
+		if (candidates.size() == 1)
+		{
+			return candidates.front();
+		}
+
+		std::uniform_int_distribution<std::size_t> distribution(0, candidates.size() - 1);
+		return candidates[distribution(targetRng())];
 	}
 
 	bool applyDamageToTarget(
@@ -128,12 +139,11 @@ namespace sw::core::features::skills
 		ecs::Entity target,
 		uint32_t damage,
 		ecs::World& world,
-		EventLog& eventLog,
-		IMapService& mapService)
+		EventLog& eventLog)
 	{
 		auto& units = world.stash<UnitData>();
 		auto* targetUnit = units.get(target);
-		if (targetUnit == nullptr || !targetUnit->isAlive())
+		if (targetUnit == nullptr)
 		{
 			return false;
 		}
@@ -146,12 +156,6 @@ namespace sw::core::features::skills
 			ecs::EntityMetaData::entityLogId(world, target),
 			damage,
 			targetHp});
-
-		if (targetHp == 0)
-		{
-			mapService.clearEntity(target);
-			eventLog.log(io::UnitDied{ecs::EntityMetaData::entityLogId(world, target)});
-		}
 
 		return true;
 	}

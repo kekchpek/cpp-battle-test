@@ -45,7 +45,6 @@ namespace sw::core::features
 			ecs::Entity target,
 			uint32_t damage,
 			ecs::World& world,
-			EventLog& eventLog,
-			IMapService& mapService);
+			EventLog& eventLog);
 	}
 }

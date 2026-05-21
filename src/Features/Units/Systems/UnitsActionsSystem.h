@@ -8,16 +8,21 @@ namespace sw::core::features
 {
 	class IUnitsDataProvider;
 	class IMovementService;
+	class IUnitsSimulationCompletionController;
 
 	class UnitsActionsSystem final : public ecs::ISystem
 	{
 	public:
-		UnitsActionsSystem(IUnitsDataProvider& unitsDataProvider, IMovementService& movementService);
+		UnitsActionsSystem(
+			IUnitsDataProvider& unitsDataProvider,
+			IMovementService& movementService,
+			IUnitsSimulationCompletionController& simulationCompletionController);
 
 		void tick(ecs::IStashProvider& stashProvider) override;
 
 	private:
 		IUnitsDataProvider& _unitsDataProvider;
 		IMovementService& _movementService;
+		IUnitsSimulationCompletionController& _simulationCompletionController;
 	};
 }
